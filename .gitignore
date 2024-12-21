@@ -1,2 +1,3 @@
 #ignore secret.py
 Project/secret.py
+Project/__pycache__
