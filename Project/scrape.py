@@ -35,5 +35,6 @@ def pull_revenue_data():
 
         #create table and insert data into SQL Server database
         db.create_table()
+        db.insert_data(df)
     except Exception as e:
         print("Error occured during data scraping to csv file: ", e)
