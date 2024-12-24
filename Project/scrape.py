@@ -4,6 +4,8 @@ import pandas as pd
 import secret
 import datetime
 import db
+import sys
+import os
 
 folder_path = secret.folder_path
 
@@ -28,13 +30,23 @@ def pull_revenue_data():
             length = len(df)
             df.loc[length] = individual_row_data
         
+        #create folder Revenue Data if it does not exist
+        directory = folder_path + '\\Revenue Data'
+        isExist = os.path.exists(directory)
+        if not isExist:
+            os.makedirs(directory)
+            print('new folder named Revenue Data created')
+        
         #insert dataframe into into csv file
         current_time_str = datetime.datetime.now().strftime("%m-%d-%Y_%H-%M-%S")
         revenue_file_path = folder_path + '\\Revenue Data\\Largest_Company_Revenue'+current_time_str+'.csv'
         df.to_csv(revenue_file_path, index=False)
+        print('data inserted into new csv file')
 
         #create table and insert data into SQL Server database
         db.create_table()
         db.insert_data(df)
+        db.display_avg_revenue()
     except Exception as e:
         print("Error occured during data scraping to csv file: ", e)
+        sys.exit()
